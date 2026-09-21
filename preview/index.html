@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bridal Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --bg: oklch(0.975 0.014 82);
+  --fg: oklch(0.25 0.035 48);
+  --primary: oklch(0.36 0.085 22);
+  --primary-fg: oklch(0.98 0.012 82);
+  --secondary: oklch(0.88 0.045 76);
+  --muted: oklch(0.93 0.018 75);
+  --muted-fg: oklch(0.5 0.03 53);
+  --accent: oklch(0.69 0.055 74);
+  --border: oklch(0.83 0.025 72);
+  --display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.02;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kicker{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;font-weight:600}
+.muted{color:var(--muted-fg)}
+.wrap{max-width:1500px;margin-inline:auto;padding-inline:var(--gutter)}
+.reveal{animation:reveal 700ms ease-out both}
+@keyframes reveal{from{opacity:.001;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* preview note */
+.note{background:var(--fg);color:var(--primary-fg);font-size:12px;text-align:center;padding:8px var(--gutter)}
+.note b{font-weight:600}
+
+/* header */
+.announce{background:var(--primary);color:var(--primary-fg);text-align:center;padding:9px var(--gutter)}
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in oklch,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px}
+.nav .links{display:flex;gap:22px}
+.nav .links a{font-size:12px;font-weight:600;letter-spacing:.08em;white-space:nowrap}
+.nav .links a.on{border-bottom:1px solid var(--fg)}
+.logo{font-family:var(--display);font-size:26px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.tools{display:flex;justify-content:flex-end;gap:18px;font-size:12px;font-weight:600;letter-spacing:.06em}
+.tools button{background:none;border:0;cursor:pointer;padding:6px 0}
+.count{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-size:10px;margin-left:4px}
+.menu-btn{display:none}
+@media (max-width:1180px){
+  .nav .links{display:none}
+  .menu-btn{display:inline-block}
+  .logo{font-size:clamp(16px,2.4vw,22px);letter-spacing:.12em}
+  .tools .wl{display:none}
+  .nav.open + .mnav{display:flex}
+}
+.mnav{display:none;flex-direction:column;gap:14px;padding:16px var(--gutter) 22px;border-top:1px solid var(--border)}
+.mnav a{font-family:var(--display);font-size:26px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;font-size:12px;font-weight:600;letter-spacing:.1em;border:1px solid var(--primary);background:var(--primary);color:var(--primary-fg);cursor:pointer;border-radius:2px;transition:background .2s,color .2s}
+.btn:hover{background:color-mix(in oklch,var(--primary) 88%,black)}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--fg)}
+.btn.ghost:hover{background:var(--fg);color:var(--bg)}
+.btn.light{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+.btn.light:hover{background:var(--secondary)}
+.btn.onimg{background:color-mix(in oklch,var(--bg) 12%,transparent);color:var(--primary-fg);border-color:var(--bg)}
+.btn.onimg:hover{background:var(--bg);color:var(--fg)}
+.btn.onwine{background:transparent;color:var(--primary-fg);border-color:var(--primary-fg)}
+.btn.onwine:hover{background:var(--primary-fg);color:var(--primary)}
+
+/* photography */
+.ph{position:relative;overflow:hidden;background:var(--muted)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;transition:transform .7s ease}
+.ph .cap{position:absolute;right:10px;bottom:8px;z-index:1;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:oklch(1 0 0/.85);text-shadow:0 1px 4px oklch(0 0 0/.5)}
+.card:hover .ph img,.ceremony:hover .ph img{transform:scale(1.03)}
+
+/* home */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:stretch;background:var(--primary);color:var(--primary-fg)}
+.hero .ph{aspect-ratio:1214/1295;background:var(--primary)}
+.hero .inner{display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,6vw,88px) var(--gutter)}
+.hero h1{font-size:clamp(3rem,7vw,6rem);margin-top:14px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.hero .ph{order:-1}}
+section.s{padding-block:clamp(72px,10vw,128px)}
+.center{text-align:center}
+.lede{max-width:880px;margin-inline:auto;padding-inline:var(--gutter)}
+.lede h2{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.1;margin-top:20px}
+.lede p{max-width:620px;margin:26px auto 0;line-height:1.9}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(2.2rem,4vw,3rem);margin-top:8px}
+.textlink{font-size:12px;font-weight:600;letter-spacing:.08em;white-space:nowrap;border-bottom:1px solid currentColor;padding-bottom:2px}
+.bg-muted{background:var(--muted)}
+.grid4{display:grid;gap:32px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.grid3{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+
+.card{display:block}
+.card .ph{aspect-ratio:2/3}
+.card .ph>*{transition:transform .7s}
+.card:hover .ph{filter:saturate(1.08)}
+.card .meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:14px}
+.card h3{font-size:1.75rem}
+.card .price{font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.card .coll{margin-top:2px}
+.card .heart{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:oklch(1 0 0/.85);cursor:pointer;display:grid;place-items:center}
+.card .heart svg{width:16px;height:16px}
+.card .heart.on svg{fill:var(--primary)}
+.card .tag{position:absolute;left:12px;top:12px;z-index:2;background:var(--bg);font-size:10px;padding:4px 8px}
+
+.ceremony{position:relative;display:block;aspect-ratio:2/3;overflow:hidden;background:var(--bg)}
+.ceremony .ph{position:absolute;inset:0;transition:transform .7s}
+
+.ceremony h3{position:absolute;left:0;right:0;bottom:0;padding:40px 24px 18px;font-size:2.4rem;color:var(--primary-fg);z-index:1;background:linear-gradient(0deg,oklch(0.25 0.035 48/.7),transparent)}
+
+.personas{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 34px;max-width:1000px;margin:40px auto 0;padding-inline:var(--gutter)}
+.personas a{font-family:var(--display);font-size:1.7rem;border-bottom:1px solid var(--fg);padding-bottom:2px}
+
+.split{display:grid;grid-template-columns:.8fr 1.2fr}
+.split .ph{aspect-ratio:2/3;background:var(--muted)}
+.split .panel{display:flex;align-items:center;padding:clamp(32px,7vw,80px)}
+.wine{background:var(--primary);color:var(--primary-fg)}
+.wine h2{font-size:clamp(2.8rem,6vw,4.6rem);margin-top:20px}
+.wine p.body{max-width:520px;margin-top:22px;line-height:1.9;opacity:.82}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+
+.craft{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:center;max-width:1400px;margin-inline:auto;padding-inline:var(--gutter)}
+.craft .ph{aspect-ratio:2/3;background:var(--bg)}
+.craft h2{font-size:3rem;margin-top:14px}
+.craft blockquote{margin:20px 0 0;font-family:var(--display);font-size:1.4rem;font-style:italic}
+.techniques{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:30px;border-top:1px solid var(--border)}
+.techniques div{padding:14px 0;border-bottom:1px solid var(--border)}
+.techniques b{display:block;font-family:var(--display);font-size:1.3rem;font-weight:500}
+.techniques span{font-size:12px;color:var(--muted-fg)}
+@media (max-width:820px){.craft{grid-template-columns:1fr}}
+
+/* quiz */
+.quiz{max-width:900px;margin:48px auto 0;border:1px solid var(--border);background:oklch(1 0 0/.5);padding:clamp(22px,4vw,44px)}
+.quiz .step{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.quiz .bar{height:2px;background:var(--border);margin:14px 0 28px}
+.quiz .bar i{display:block;height:100%;background:var(--primary);transition:width .3s}
+.quiz h3{font-size:2rem}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:22px}
+.opt{border:1px solid var(--border);background:var(--bg);padding:16px 18px;text-align:left;cursor:pointer;border-radius:2px}
+.opt:hover{border-color:var(--fg)}
+.opt small{display:block;color:var(--muted-fg);font-size:12px;margin-top:2px}
+.result h3{font-size:2.6rem;margin-top:10px}
+.swatches{display:flex;gap:8px;margin-top:18px}
+.swatches span{width:34px;height:34px;border-radius:50%;border:1px solid var(--border)}
+
+/* forms */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .full{grid-column:1/-1}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;height:46px;padding:0 12px;border:1px solid var(--border);background:var(--bg);border-radius:0}
+.field textarea{height:96px;padding:10px 12px;resize:vertical}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+.ok{border:1px solid var(--accent);padding:22px;background:var(--bg)}
+.ok h3{font-size:1.9rem}
+
+.journal{display:grid;gap:40px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.journal .ph{aspect-ratio:2/3}
+.journal h3{font-size:1.9rem;margin-top:8px}
+
+.newsletter form{display:flex;max-width:520px;margin:30px auto 0;border-bottom:1px solid var(--fg)}
+.newsletter input{flex:1;min-width:0;height:48px;border:0;background:transparent;outline:none}
+.newsletter button{background:none;border:0;font-size:12px;font-weight:600;letter-spacing:.1em;cursor:pointer;padding:0 8px}
+
+/* shop */
+.shop-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:8px}
+.shop-head h1{font-size:clamp(3rem,7vw,5rem)}
+.shop{display:grid;grid-template-columns:220px 1fr;gap:48px;margin-top:48px}
+.filters{display:flex;flex-direction:column;gap:26px}
+.filters .opts2{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.filters label{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.filters input{accent-color:var(--primary);width:15px;height:15px}
+.fbtn{display:none;width:100%;margin-bottom:24px}
+.grid-shop{display:grid;gap:48px 24px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+@media (max-width:820px){.shop{grid-template-columns:1fr;gap:0}.filters{display:none}.filters.open{display:flex;margin-bottom:32px;border:1px solid var(--border);padding:20px}.fbtn{display:inline-flex}}
+
+/* product */
+.pdp{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;padding-block:32px 96px}
+.gallery{display:block}
+.thumbs{display:flex;flex-direction:column;gap:8px}
+.thumbs button{height:104px;border:1px solid var(--border);padding:0;cursor:pointer;background:none}
+.thumbs button.on{border-color:var(--fg)}
+.thumbs .ph{height:100%}
+.main-img{aspect-ratio:2/3}
+.pdp aside{position:sticky;top:96px;align-self:start}
+.pdp h1{font-size:clamp(3rem,6vw,4.4rem);margin-top:8px}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-block:1px solid var(--border);padding-block:22px;margin:30px 0 0}
+.specs dt{color:var(--muted-fg);font-size:13px}
+.specs dd{margin:0;font-size:14px}
+.sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sizes button{height:44px;padding:0 16px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.06em}
+.sizes button.on{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
+.mtm{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.mtm input{height:44px;padding:0 12px;border:1px solid var(--border);background:var(--bg)}
+.buy{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:26px}
+@media (max-width:900px){.pdp{grid-template-columns:1fr}.pdp aside{position:static}.gallery{grid-template-columns:1fr}.thumbs{flex-direction:row;order:2;overflow-x:auto}.thumbs button{width:76px;flex:none}}
+
+/* consultation page */
+.consult{display:grid;grid-template-columns:.8fr 1.2fr}
+.consult .ph{aspect-ratio:2/3;background:var(--muted)}
+.consult .panel{padding:clamp(28px,6vw,64px);display:flex;align-items:center}
+.consult h1{font-size:clamp(2.8rem,5vw,4rem);margin-top:12px}
+@media (max-width:820px){.consult{grid-template-columns:1fr}}
+
+/* drawer */
+.drawer{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:oklch(0.25 0.035 48/.4)}
+.drawer .sheet{width:min(420px,100%);height:100%;background:var(--bg);padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px;overflow:auto}
+.drawer h2{font-size:2.2rem}
+.line{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;border-bottom:1px solid var(--border);padding-bottom:14px}
+.line .ph{height:96px}
+.line b{font-family:var(--display);font-size:1.3rem;font-weight:500}
+.x{background:none;border:0;cursor:pointer;font-size:12px;text-decoration:underline;color:var(--muted-fg)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 20px;font-size:13px;z-index:60}
+
+footer{background:var(--fg);color:var(--primary-fg);padding-block:64px 40px}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+footer .logo{font-size:22px}
+footer a{display:block;font-size:13px;opacity:.75;margin-top:8px}
+footer .fine{margin-top:48px;font-size:12px;opacity:.55}
+@media (max-width:720px){footer .cols{grid-template-columns:1fr 1fr}}
+
+/* shop info, checkout, tracking, reviews */
+.page{max-width:1200px;margin-inline:auto;padding:56px var(--gutter) 112px}
+.page h1{font-size:clamp(2.8rem,6vw,4.4rem);margin-top:10px}
+.lead{margin-top:14px;max-width:620px;line-height:1.8;color:var(--muted-fg)}
+.two{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;margin-top:40px;align-items:start}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.box{border:1px solid var(--border);background:oklch(1 0 0/.55);padding:clamp(20px,3vw,32px)}
+.box h2{font-size:1.9rem;margin-bottom:16px}
+.legend{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:26px 0 12px;grid-column:1/-1}
+.legend:first-child{margin-top:0}
+.pay{display:flex;flex-direction:column;gap:8px}
+.pay label{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);padding:14px 16px;cursor:pointer;background:var(--bg)}
+.pay input{accent-color:var(--primary);margin-top:4px}
+.pay small{display:block;color:var(--muted-fg);font-size:12px}
+.sumline{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding-block:10px;border-bottom:1px solid var(--border)}
+.sumline .ph{height:84px}
+.sumline b{font-family:var(--display);font-size:1.2rem;font-weight:500}
+.row{display:flex;justify-content:space-between;gap:12px;padding-block:6px;font-variant-numeric:tabular-nums}
+.row.total{border-top:1px solid var(--fg);margin-top:8px;padding-top:12px;font-weight:600}
+.oid{font-family:var(--display);font-size:2.2rem;letter-spacing:.06em}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.timeline{list-style:none;margin:28px 0 0;padding:0;position:relative}
+.timeline li{position:relative;padding:0 0 26px 38px}
+.timeline li::before{content:"";position:absolute;left:9px;top:22px;bottom:0;width:2px;background:var(--border)}
+.timeline li:last-child::before{display:none}
+.timeline .dot{position:absolute;left:0;top:3px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);background:var(--bg)}
+.timeline li.done .dot{background:var(--primary);border-color:var(--primary)}
+.timeline li.done::before{background:var(--primary)}
+.timeline li.now .dot{border-color:var(--primary);box-shadow:0 0 0 4px color-mix(in oklch,var(--primary) 18%,transparent)}
+.timeline b{display:block;font-weight:600}
+.timeline span{font-size:13px;color:var(--muted-fg)}
+.pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;background:var(--secondary);color:var(--fg)}
+.reviews{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:32px}
+.review{border:1px solid var(--border);background:var(--bg);padding:22px;display:flex;flex-direction:column;gap:10px}
+.review p.t{font-family:var(--display);font-size:1.3rem;line-height:1.35}
+.review .who{font-size:12px;color:var(--muted-fg);margin-top:auto}
+.stars{color:oklch(0.62 0.11 70);letter-spacing:2px;font-size:15px}
+.tagx{align-self:flex-start;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border:1px dashed var(--muted-fg);color:var(--muted-fg);padding:2px 7px}
+.rate{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px}
+.rate input{position:absolute;opacity:0;width:1px;height:1px}
+.rate label{font-size:26px;color:var(--border);cursor:pointer;line-height:1}
+.rate input:checked~label,.rate label:hover,.rate label:hover~label{color:oklch(0.62 0.11 70)}
+.rate input:focus-visible+label{outline:2px solid var(--accent)}
+.contact-list{display:grid;gap:22px}
+.contact-list .k{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-fg)}
+.contact-list .v{font-family:var(--display);font-size:1.6rem;line-height:1.25;margin-top:4px;word-break:break-word}
+.fillme{background:oklch(0.93 0.06 85);padding:10px 14px;font-size:13px;border-left:3px solid var(--accent);margin-top:20px}
+footer .contact a,footer .contact p{display:block;font-size:13px;opacity:.8;margin-top:8px}
+</style>
+
+<div class="note"><b>Preview build</b> of the bridal couture website.</div>
+<div class="announce kicker">Complimentary bridal styling with every made-to-measure commission</div>
+<header class="site">
+  <div class="wrap nav" id="nav">
+    <nav class="links" aria-label="Primary">
+      <a href="#/shop" data-r="shop">COLLECTION</a>
+      <a href="#/consultation" data-r="consultation">CONSULTATION</a>
+      <a href="#/track" data-r="track">TRACK ORDER</a>
+      <a href="#/contact" data-r="contact">CONTACT</a>
+    </nav>
+    <button class="menu-btn tools" style="justify-content:flex-start;background:none;border:0;padding:0;font-size:12px;font-weight:600;letter-spacing:.06em;cursor:pointer" id="menuBtn" aria-expanded="false">MENU</button>
+    <a href="#/" class="logo" aria-label="Home">The Bridal Atelier</a>
+    <div class="tools">
+      <button class="wl" id="wlBtn">WISHLIST<span class="count" id="wlCount">0</span></button>
+      <button id="bagBtn">BAG<span class="count" id="bagCount">0</span></button>
+    </div>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Mobile">
+    <a href="#/shop">Collection</a><a href="#/consultation">Consultation</a><a href="#/journal">Journal</a><a href="#/reviews">Reviews</a><a href="#/track">Track order</a><a href="#/contact">Contact</a><a href="#/" id="mWl">Wishlist</a>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="logo">The Bridal Atelier</div><p style="margin-top:12px;max-width:320px;opacity:.75;font-size:13px">Private Indian bridal couture shaped by heritage craft and contemporary silhouettes.</p></div>
+      <div><p class="kicker">Shop</p><a href="#/shop?Category=Lehengas">Lehengas</a><a href="#/shop?Category=Sarees">Sarees</a><a href="#/shop?Category=Gowns">Gowns</a><a href="#/shop?Category=Indo-Western">Indo-Western</a></div>
+      <div><p class="kicker">Help</p><a href="#/track">Track your order</a><a href="#/checkout">Place an order</a><a href="#/reviews">Customer reviews</a><a href="#/consultation">Book a consultation</a></div>
+      <div class="contact" id="footContact"></div>
+    </div>
+    <p class="fine">© 2026 The Bridal Atelier. Preview build.</p>
+  </div>
+</footer>
+
+<script>
+/* ===== YOUR SHOP DETAILS: replace these placeholders ===== */
+const SHOP={
+  email:"your-email@example.com",
+  phone:"+91 00000 00000",
+  whatsapp:"910000000000",            /* country code + number, digits only */
+  address:"Shop no. __, Street name, Area, City, State 000000",
+  hours:"Mon to Sat, 11 am to 8 pm · Sunday by appointment",
+  mapQuery:"Shop address, City"       /* what to search in Google Maps */
+};
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const telHref=()=>"tel:"+SHOP.phone.replace(/[^+\d]/g,"");
+const waHref=t=>"https://wa.me/"+SHOP.whatsapp+(t?"?text="+encodeURIComponent(t):"");
+const mailHref=(sub,body)=>"mailto:"+SHOP.email+"?subject="+encodeURIComponent(sub)+(body?"&body="+encodeURIComponent(body):"");
+const mapHref=()=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(SHOP.mapQuery);
+const dfmt=d=>new Date(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+const stars=n=>"★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);
+
+const products=[{"id":"aaroh","name":"Aaroh","collection":"The Bridal Edit","price":245000,"category":"Lehengas","occasion":"Wedding","color":"Ivory","fabric":"Silk","embroidery":"Resham","silhouette":"Classic","madeToOrder":true,"image":"ivory-lehenga","description":"An ivory silk lehenga climbing with deep-red resham florals, finished with a sheer net dupatta edged in the same vine."},
+ {"id":"meher","name":"Meher","collection":"Gulzaar","price":285000,"category":"Lehengas","occasion":"Mehendi","color":"Sage","fabric":"Tulle","embroidery":"Zardozi","silhouette":"Classic","madeToOrder":true,"image":"sage-lehenga","description":"A sage tulle lehenga worked edge to edge in antique-gold zardozi, with tasselled latkans and a scalloped dupatta."},
+ {"id":"aabha","name":"Aabha","collection":"Moon Garden","price":215000,"category":"Sarees","occasion":"Cocktail","color":"Lilac","fabric":"Organza","embroidery":"Zardozi","silhouette":"Draped","madeToOrder":false,"image":"lilac-saree","description":"A saree that fades from storm grey to lilac, trailed with rose-gold floral zardozi and a full-sleeved sculpted blouse."},
+ {"id":"kesar","name":"Kesar","collection":"The Bridal Edit","price":265000,"category":"Lehengas","occasion":"Wedding","color":"Saffron","fabric":"Silk","embroidery":"Mirror work","silhouette":"Classic","madeToOrder":true,"image":"saffron-lehenga","description":"Saffron and rose panels worked in mirror and pearl, with a scalloped cutwork dupatta that melts from orange to gold."},
+ {"id":"neelam","name":"Neelam","collection":"Moon Garden","price":295000,"category":"Gowns","occasion":"Reception","color":"Ice Blue","fabric":"Tulle","embroidery":"Beadwork","silhouette":"Column","madeToOrder":true,"image":"ice-blue-mermaid","description":"An ice-blue mermaid set encrusted with crystal and sequin, with sheer cape sleeves that trail to the floor."},
+ {"id":"rani","name":"Rani","collection":"Mehendi Edit","price":98000,"category":"Lehengas","occasion":"Mehendi","color":"Fuchsia","fabric":"Georgette","embroidery":"Gota Patti","silhouette":"Fluid","madeToOrder":false,"image":"fuchsia-lime-lehenga","description":"A fuchsia kurti over a lime net lehenga, paired with a two-tone dupatta scattered with sequins."},
+ {"id":"kahwa","name":"Kahwa","collection":"Cocktail Edit","price":175000,"category":"Gowns","occasion":"Cocktail","color":"Cocoa","fabric":"Georgette","embroidery":"Mirror work","silhouette":"Column","madeToOrder":false,"image":"cocoa-sequin-set","description":"A cocoa mermaid skirt and bralette in mirror cutwork, with a sequinned drape falling from one shoulder."},
+ {"id":"zoya","name":"Zoya","collection":"Indo-Western","price":158000,"category":"Indo-Western","occasion":"Cocktail","color":"Sage","fabric":"Crepe","embroidery":"Zardozi","silhouette":"Draped","madeToOrder":true,"image":"sage-jacket-drape","description":"A draped ivory skirt and embroidered bustier under a floor-length sage jacket bordered in zardozi."},
+ {"id":"mehrunissa","name":"Mehrunissa","collection":"Mehrab","price":395000,"category":"Lehengas","occasion":"Wedding","color":"Red","fabric":"Velvet","embroidery":"Zardozi","silhouette":"Classic","madeToOrder":true,"image":"red-bridal-lehenga","description":"The classic bridal red: velvet kalis densely worked in zardozi and mehrab arches, with a double-bordered veil dupatta."},
+ {"id":"noor","name":"Noor","collection":"Mehrab","price":325000,"category":"Gowns","occasion":"Reception","color":"Burgundy","fabric":"Tulle","embroidery":"Beadwork","silhouette":"Dramatic","madeToOrder":true,"image":"wine-saree-gown","description":"A pre-draped saree gown in deep wine, its sweetheart corset and fishtail skirt hand-set with thousands of glass beads."},
+ {"id":"roohi","name":"Roohi","collection":"Mehendi Edit","price":145000,"category":"Lehengas","occasion":"Mehendi","color":"Green","fabric":"Georgette","embroidery":"Mirror work","silhouette":"Fluid","madeToOrder":false,"image":"mehendi-lehenga","description":"A leaf-green georgette lehenga glinting with mirror work and sequins, made for mehendi afternoons."},
+ {"id":"sunehri","name":"Sunehri","collection":"Haldi Edit","price":168000,"category":"Lehengas","occasion":"Haldi","color":"Yellow","fabric":"Organza","embroidery":"Resham","silhouette":"Classic","madeToOrder":false,"image":"yellow-peplum-lehenga","description":"A buttercup peplum choli over a floral-embroidered lehenga, finished with a pearl-drop hem and net dupatta."},
+ {"id":"shehla","name":"Shehla","collection":"Heirloom","price":210000,"category":"Gowns","occasion":"Reception","color":"Burgundy","fabric":"Satin","embroidery":"Kundan","silhouette":"Column","madeToOrder":true,"image":"burgundy-mermaid-gown","description":"A strapless burgundy mermaid gown with a jewelled bodice and a stone-studded cape from one shoulder."},
+ {"id":"amber","name":"Amber","collection":"Indo-Western","price":125000,"category":"Indo-Western","occasion":"Haldi","color":"Mustard","fabric":"Georgette","embroidery":"Resham","silhouette":"Draped","madeToOrder":false,"image":"mustard-cape-set","description":"A mustard draped skirt and floral bustier under a sheer embroidered cape."},
+ {"id":"gulnaar","name":"Gulnaar","collection":"Heirloom","price":185000,"category":"Indo-Western","occasion":"Reception","color":"Fuchsia","fabric":"Satin","embroidery":"Resham","silhouette":"Draped","madeToOrder":true,"image":"fuchsia-cape-gown","description":"A fuchsia satin drape gown under an organza cape embroidered with paisley and rose."},
+ {"id":"gul","name":"Gul","collection":"Haldi Edit","price":165000,"category":"Lehengas","occasion":"Haldi","color":"Yellow","fabric":"Organza","embroidery":"Gota Patti","silhouette":"Fluid","madeToOrder":false,"image":"haldi-lehenga","description":"A marigold-yellow haldi lehenga scattered with gota florals and finished with a pearl-drop hem that sways as you walk."},
+ {"id":"sitara","name":"Sitara","collection":"Heirloom","price":189000,"category":"Sarees","occasion":"Reception","color":"Blush","fabric":"Tulle","embroidery":"Kundan","silhouette":"Draped","madeToOrder":true,"image":"blush-saree","description":"A blush tulle saree bordered in paisley cutwork set with ruby and emerald kundan stones."}];
+const uniq=k=>[...new Set(products.map(p=>p[k]))];
+const filters={Category:uniq("category"),Occasion:uniq("occasion"),Color:uniq("color"),Price:["Under ₹1,50,000","₹1,50,000 – ₹2,50,000","Above ₹2,50,000"],Fabric:uniq("fabric"),Embroidery:uniq("embroidery"),Silhouette:uniq("silhouette"),"Made to Order":["Yes"]};
+const fmt=p=>"₹"+p.toLocaleString("en-IN");
+const IMG={hero:"hero.webp",wine:"wine-saree-gown",sage:"fuchsia-cape-gown",craft:"mustard-cape-set"};
+const src=k=>{const f=IMG[k]||k;return "img/"+(f.includes(".")?f:f+".jpg")};
+const ph=(k,cls="",alt="")=>`<div class="ph ${cls}"><img src="${src(k)}" alt="${alt}" loading="lazy"></div>`;
+const heart='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+
+const store={bag:[],wish:new Set(),sel:{},size:"M",img:null,quiz:{step:0,answers:[]}};
+try{const s=JSON.parse(localStorage.getItem("atelier")||"{}");store.bag=s.bag||[];store.wish=new Set(s.wish||[])}catch(e){}
+const save=()=>{try{localStorage.setItem("atelier",JSON.stringify({bag:store.bag,wish:[...store.wish]}))}catch(e){}};
+function counts(){document.getElementById("bagCount").textContent=store.bag.length;document.getElementById("wlCount").textContent=store.wish.size}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function addBag(id){const p=products.find(x=>x.id===id);store.bag.push({id,size:store.size});save();counts();toast(`${p.name} added to your bag`)}
+function toggleWish(id){store.wish.has(id)?store.wish.delete(id):store.wish.add(id);save();counts();render()}
+
+function card(p){const on=store.wish.has(p.id);return `<a class="card" href="#/product/${p.id}">
+  <div style="position:relative">${ph(p.image,"","Bridal outfit")}${p.madeToOrder?'<span class="tag kicker">Made to order</span>':""}
+  <button class="heart ${on?"on":""}" aria-label="${on?"Remove from":"Add to"} wishlist" data-wish="${p.id}">${heart}</button></div>
+  <div class="meta"><span class="price">${fmt(p.price)}</span><span class="kicker muted">View</span></div></a>`}
+
+function consultForm(){return `<form class="form" id="cform">
+ <div class="field"><label for="cf-name">Full name</label><input id="cf-name" required minlength="2" placeholder="Your full name"></div>
+ <div class="field"><label for="cf-email">Email</label><input id="cf-email" type="email" required placeholder="you@email.com"></div>
+ <div class="field"><label for="cf-phone">Phone</label><input id="cf-phone" required minlength="7" placeholder="+91"></div>
+ <div class="field"><label for="cf-date">Wedding date</label><input id="cf-date" type="date"></div>
+ <div class="field"><label for="cf-city">Wedding city</label><input id="cf-city" required placeholder="e.g. Jaipur"></div>
+ <div class="field"><label for="cf-fn">Function</label><select id="cf-fn"><option>Wedding</option><option>Reception</option><option>Mehendi</option><option>Haldi</option><option>Cocktail</option></select></div>
+ <div class="field"><label for="cf-style">Preferred style</label><select id="cf-style"><option>The Traditionalist</option><option>The Modernist</option><option selected>The Romantic</option><option>The Minimalist</option><option>The Maximalist</option></select></div>
+ <div class="field"><label for="cf-budget">Budget range</label><select id="cf-budget"><option>Under ₹1,50,000</option><option selected>₹1,50,000 – ₹2,50,000</option><option>Above ₹2,50,000</option></select></div>
+ <div class="field"><label for="cf-color">Colour preference</label><input id="cf-color" value="Ivory & antique gold"></div>
+ <div class="field"><label for="cf-tailor">Tailoring</label><select id="cf-tailor"><option>Made to measure</option><option>Standard sizing</option><option>Undecided</option></select></div>
+ <div class="field full"><label for="cf-msg">Tell us about your celebration</label><textarea id="cf-msg" placeholder="Functions, dates, anything you already love"></textarea></div>
+ <div class="full"><button class="btn" type="submit" style="width:100%">REQUEST MY CONSULTATION</button></div>
+</form>`}
+
+const quizQs=[
+ {q:"How do you picture your wedding day?",o:[["Rooted in ritual","Temple bells, heirloom jewellery"],["Quietly modern","Clean lines, a single statement"],["Soft and romantic","Florals, pastels, candlelight"],["Grand celebration","Colour, scale, every detail"]]},
+ {q:"Which palette draws you in?",o:[["Maroon & gold","Classic bridal red"],["Ivory & champagne","Luminous neutrals"],["Blush & sage","Garden-soft tones"],["Emerald & wine","Jewel depth"]]},
+ {q:"Your ideal silhouette?",o:[["Full lehenga","Volume and flare"],["Draped saree","Fluid, effortless"],["Column gown","Sculpted and sleek"],["Sharara","Playful movement"]]}
+];
+const personas=[
+ {n:"The Traditionalist",d:"You honour heritage first. Zardozi on silk, maroon and gold, a lehenga that could be passed down.",pick:"mehrunissa",sw:["oklch(0.36 0.12 22)","oklch(0.72 0.1 80)","oklch(0.93 0.03 82)"]},
+ {n:"The Modernist",d:"Restraint is your luxury. One perfect line, ivory tones and handwork that rewards a closer look.",pick:"aabha",sw:["oklch(0.95 0.02 85)","oklch(0.82 0.05 78)","oklch(0.3 0.03 50)"]},
+ {n:"The Romantic",d:"You love softness and story: organza, tonal resham and a colour that feels like morning light.",pick:"meher",sw:["oklch(0.82 0.05 135)","oklch(0.9 0.04 20)","oklch(0.96 0.02 85)"]},
+ {n:"The Maximalist",d:"More is the point. Velvet, metal thread and a jewel-toned palette made for a grand reception.",pick:"noor",sw:["oklch(0.3 0.1 18)","oklch(0.45 0.1 160)","oklch(0.75 0.11 80)"]}
+];
+function quiz(){const s=store.quiz;
+ if(s.step>=quizQs.length){const tally=[0,0,0,0];s.answers.forEach(a=>tally[a]++);const i=tally.indexOf(Math.max(...tally));const P=personas[i];const p=products.find(x=>x.id===P.pick);
+  return `<div class="quiz result"><p class="kicker muted">Your bridal personality</p><h3>${P.n}</h3><p style="margin-top:12px;max-width:560px;line-height:1.8">${P.d}</p>
+  <div class="swatches">${P.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:26px"><a class="btn" href="#/product/${p.id}">SEE ${p.name.toUpperCase()}</a><button class="btn ghost" data-quiz="reset">TAKE IT AGAIN</button></div></div>`}
+ const Q=quizQs[s.step];
+ return `<div class="quiz"><div class="step"><span class="kicker muted">Question ${s.step+1} of ${quizQs.length}</span></div><div class="bar"><i style="width:${(s.step/quizQs.length)*100}%"></i></div>
+ <h3>${Q.q}</h3><div class="opts">${Q.o.map((o,i)=>`<button class="opt" data-quiz="${i}">${o[0]}<small>${o[1]}</small></button>`).join("")}</div></div>`}
+
+const DAY=864e5;
+function stagesFor(o){const mto=o.items.some(i=>(products.find(p=>p.id===i.id)||{}).madeToOrder);
+ return mto?[["Order placed","We have your order and details.",0],["Confirmed by the atelier","We call you to confirm size, colour and advance payment.",1],["Measurements & fabric","Fabric is cut to your measurements.",4],["Handwork in progress","Embroidery by our karigars.",8],["Final fitting","Try-on at the store or by video call.",38],["Dispatched","Packed in a garment box and shipped.",44],["Delivered","Enjoy your celebration.",47]]
+ :[["Order placed","We have your order and details.",0],["Confirmed","We call you to confirm size and payment.",1],["Packed","Steamed, checked and boxed.",2],["Dispatched","Shipped with tracking.",3],["Delivered","Enjoy your celebration.",6]]}
+function orders(){return load("atelier-orders",{})}
+const sampleOrder={id:"BA-SAMPLE",sample:true,created:Date.now()-10*DAY,name:"Sample customer",phone:"+91 00000 00000",city:"Jaipur",items:[{id:"mehrunissa",size:"MADE TO MEASURE",price:395000}],pay:"UPI advance"};
+function findOrder(id){id=(id||"").trim().toUpperCase();if(id===sampleOrder.id)return sampleOrder;return orders()[id]}
+function orderText(o){return `Order ${o.id}\nName: ${o.name}\nPhone: ${o.phone}\n${o.email?"Email: "+o.email+"\n":""}Address: ${o.address||""}, ${o.city||""} ${o.pin||""}\n${o.date?"Wedding date: "+o.date+"\n":""}Items:\n${o.items.map(i=>{const p=products.find(x=>x.id===i.id);return "- "+p.name+" ("+i.size+") "+fmt(i.price)}).join("\n")}\nTotal: ${fmt(o.items.reduce((a,i)=>a+i.price,0))}\nPayment: ${o.pay}${o.notes?"\nNotes: "+o.notes:""}`}
+
+const exampleReviews=[
+ {name:"Example: Priya",city:"Delhi",rating:5,product:"mehrunissa",text:"Write your customer's words here. For example, how the fitting went and how the outfit felt on the day.",example:true},
+ {name:"Example: Sana",city:"Lucknow",rating:5,product:"meher",text:"Replace these three cards with real reviews from your brides, with their permission.",example:true},
+ {name:"Example: Kavya",city:"Pune",rating:4,product:"sunehri",text:"Keep each review short: the outfit, the occasion and one detail they loved.",example:true}];
+function allReviews(){return [...load("atelier-reviews",[]),...exampleReviews]}
+function reviewCard(r){const p=products.find(x=>x.id===r.product);return `<article class="review">${r.example?'<span class="tagx">Example</span>':""}<span class="stars" aria-label="${r.rating} out of 5">${stars(r.rating)}</span><p class="t">“${esc(r.text)}”</p><p class="who">${esc(r.name)}${r.city?", "+esc(r.city):""}${p?" · "+p.name:""}${r.date?" · "+dfmt(r.date):""}</p></article>`}
+function reviewForm(pid){return `<form class="form box" id="rform" data-product="${pid||""}" style="margin-top:28px"><h2 class="full" style="margin:0">Share your experience</h2>
+ <div class="field"><label for="rv-name">Your name</label><input id="rv-name" required minlength="2"></div>
+ <div class="field"><label for="rv-city">City</label><input id="rv-city"></div>
+ ${pid?"":`<div class="field full"><label for="rv-product">Outfit</label><select id="rv-product"><option value="">Choose your outfit</option>${products.map(p=>`<option value="${p.id}">${p.name} · ${p.category}</option>`).join("")}</select></div>`}
+ <div class="field full"><label>Rating</label><div class="rate">${[5,4,3,2,1].map(n=>`<input type="radio" name="rv-rating" id="rv-r${n}" value="${n}" ${n===5?"checked":""}><label for="rv-r${n}" title="${n} stars">★</label>`).join("")}</div></div>
+ <div class="field full"><label for="rv-text">Your review</label><textarea id="rv-text" required minlength="10" placeholder="How was the fit, the fabric, the service?"></textarea></div>
+ <div class="full"><button class="btn" type="submit">POST REVIEW</button></div></form>`}
+function reviewsBlock(pid,title){const list=allReviews().filter(r=>!pid||r.product===pid);
+ return `<div class="sec-head" style="margin-bottom:0"><div><p class="kicker">Customer reviews</p><h2>${title}</h2></div>${pid?"":'<a class="textlink" href="#/reviews">ALL REVIEWS</a>'}</div>
+ ${list.some(r=>r.example)?'<p class="fillme">The cards marked “Example” are placeholders. Replace them with real reviews from your customers.</p>':""}
+ ${list.length?`<div class="reviews">${list.map(reviewCard).join("")}</div>`:'<p class="muted" style="margin-top:20px">No reviews for this outfit yet. Be the first to share yours.</p>'}`}
+
+const journalItems=[["haldi-lehenga","Bridal Styling","A New Language for the Bridal Lehenga"],["blush-saree","Craft","Why Handwork Becomes Heirloom"],["sage-jacket-drape","Tailoring","The Poetry of a Perfect Drape"]];
+
+const pages={
+home:()=>`
+<section class="hero"><div class="inner reveal"><p class="kicker">The Bridal Edit</p><h1>Where heritage<br>becomes yours.</h1>
+ <div class="ctas"><a class="btn light" href="#/shop">EXPLORE THE COLLECTION</a><a class="btn onimg" href="#/consultation">BOOK A BRIDAL CONSULTATION</a></div></div>${ph("hero","","Red bridal lehenga")}</section>
+<section class="s center"><div class="lede"><p class="kicker muted">Our atelier</p><h2>Couture conceived as memory, shaped by the hand and held by generations.</h2><p class="muted">We bring India’s storied techniques into an exacting, contemporary wardrobe for the modern bride.</p></div></section>
+<section style="padding-bottom:112px"><div class="wrap"><div class="sec-head"><div><p class="kicker">Curated for you</p><h2>Featured bridal collection</h2></div><a class="textlink" href="#/shop">VIEW ALL</a></div>
+ <div class="grid4">${products.slice(0,4).map(card).join("")}</div></div></section>
+<section class="s bg-muted"><div class="wrap"><p class="kicker">Shop by ceremony</p><h2 style="font-size:clamp(2.2rem,4vw,3rem);margin-top:8px">Every ritual, considered.</h2>
+ <div class="grid3" style="margin-top:40px">${[["Mehendi","mehendi-lehenga"],["Haldi","yellow-peplum-lehenga"],["Reception","burgundy-mermaid-gown"]].map(([n,k])=>`<a class="ceremony" href="#/shop?Occasion=${n}">${ph(k)}<h3>${n}</h3></a>`).join("")}</div></div></section>
+<section class="s center"><p class="kicker">Shop by bridal personality</p><h2 style="font-size:clamp(2.2rem,4vw,3rem);margin-top:12px">Dress the woman you are.</h2>
+ <div class="personas">${["The Traditionalist","The Modernist","The Romantic","The Minimalist","The Maximalist"].map(x=>`<a href="#/shop">${x}</a>`).join("")}</div></section>
+<section class="split">${ph("wine","","Wine saree gown")}<div class="panel wine"><div><p class="kicker">The Mehrab story</p><h2>An heirloom, made unmistakably yours.</h2><p class="body">Rich velvets, arched motifs and metal thread speak to a lineage of celebration, reimagined with a clean couture hand.</p><a class="btn onwine" style="margin-top:32px" href="#/shop?Category=Lehengas">DISCOVER MEHRAB</a></div></div></section>
+<section class="s"><div class="craft">${ph("craft","","Mustard cape set")}<div><p class="kicker">The art of the hand</p><h2>Crafted for your chapter.</h2><blockquote>“Not just a wedding outfit. A piece of your story.”</blockquote>
+ <div class="techniques"><div><b>Zardozi</b><span>Metal-thread couching</span></div><div><b>Resham</b><span>Silk-floss embroidery</span></div><div><b>Gota Patti</b><span>Rajasthani ribbon appliqué</span></div><div><b>Kundan</b><span>Set-stone embellishment</span></div></div></div></div></section>
+<section class="s bg-muted"><div class="wrap"><p class="kicker">Just arrived</p><h2 style="font-size:clamp(2.2rem,4vw,3rem);margin-top:8px">New in the atelier</h2><div class="grid4" style="margin-top:40px">${products.slice(4,8).map(card).join("")}</div></div></section>
+<section class="s"><div class="wrap center"><p class="kicker">A private edit</p><h2 style="font-size:3rem;margin-top:12px">Find your bridal style</h2></div><div class="wrap" id="quiz">${quiz()}</div></section>
+<section class="split" style="background:var(--secondary)">${ph("sage","","Fuchsia cape gown")}<div class="panel"><div style="width:100%"><p class="kicker">Private appointments</p><h2 style="font-size:3rem;margin-top:12px">Your bridal consultation</h2><p class="muted" style="margin-top:14px;max-width:520px;line-height:1.8">Meet one-to-one with a bridal stylist to shape your complete wedding wardrobe.</p><div style="margin-top:30px" data-form>${consultForm()}</div></div></div></section>
+<section class="s"><div class="wrap" style="max-width:1400px"><div class="sec-head"><div><p class="kicker">The Journal</p><h2>Notes from the atelier</h2></div><a class="textlink" href="#/journal">READ ALL</a></div>
+ <div class="journal">${journalItems.slice(0,2).map(([k,,t])=>`<article>${ph(k)}<p class="kicker muted" style="margin-top:20px">Journal · 6 min</p><h3>${t}</h3></article>`).join("")}</div></div></section>
+<section class="s bg-muted"><div class="wrap" style="max-width:1400px">${reviewsBlock("","Kind words from our brides")}</div></section>
+<section class="s"><div class="wrap two" style="margin-top:0;max-width:1400px"><div><p class="kicker">Visit the store</p><h2 style="font-size:clamp(2.4rem,5vw,3.6rem);margin-top:10px">Come and see the handwork up close.</h2><p class="lead">Try on outfits, feel the fabrics and meet our stylist. Walk in during store hours or book a private appointment.</p><div class="btns"><a class="btn" href="${mapHref()}" target="_blank" rel="noopener">GET DIRECTIONS</a><a class="btn ghost" href="#/contact">ALL CONTACT DETAILS</a></div></div>${contactList()}</div></section>
+<section class="s center newsletter" style="border-top:1px solid var(--border);padding-block:80px"><div class="wrap"><p class="kicker">Letters from the atelier</p><h2 style="font-size:2.6rem;margin-top:12px">Private previews, atelier stories.</h2>
+ <form id="nl"><input id="nl-email" type="email" required placeholder="Your email address" aria-label="Email address"><button type="submit">SUBSCRIBE</button></form></div></section>`,
+
+shop:()=>{const f=products.filter(p=>Object.entries(store.sel).every(([k,vals])=>!vals.length||vals.some(v=>k==="Made to Order"?p.madeToOrder:k==="Price"?(v.startsWith("Under")?p.price<150000:v.startsWith("Above")?p.price>250000:p.price>=150000&&p.price<=250000):p[{Category:"category",Occasion:"occasion",Color:"color",Fabric:"fabric",Embroidery:"embroidery",Silhouette:"silhouette"}[k]]===v)));
+ return `<div class="wrap" style="padding-block:56px 112px"><p class="kicker">The Collection</p><div class="shop-head"><h1>Couture, considered.</h1><span class="muted" style="font-size:14px">${f.length} pieces</span></div>
+ <div class="shop"><div><button class="btn ghost fbtn" id="fbtn">FILTER &amp; REFINE</button><aside class="filters" id="filters">${Object.entries(filters).map(([k,vals])=>`<div><p class="kicker">${k}</p><div class="opts2">${vals.map(v=>`<label><input type="checkbox" data-f="${k}" value="${v}" ${store.sel[k]?.includes(v)?"checked":""}>${v}</label>`).join("")}</div></div>`).join("")}</aside></div>
+ <div><div class="grid-shop">${f.map(card).join("")}</div>${f.length?"":'<p class="muted center" style="padding-block:96px">No pieces match this private edit. Clear a filter to see more.</p>'}</div></div></div>`},
+
+product:(id)=>{const p=products.find(x=>x.id===id);if(!p)return pages.notfound();const on=store.wish.has(p.id);
+ return `<div class="wrap"><div class="pdp"><div class="gallery">${ph(p.image,"main-img",p.name)}</div>
+ <aside><p class="kicker muted">${p.collection}</p><h1>${p.name}</h1><p style="font-size:1.25rem;margin-top:10px;font-variant-numeric:tabular-nums">${fmt(p.price)}</p><p class="muted" style="margin-top:22px;max-width:560px;line-height:1.9">${p.description}</p>
+ <dl class="specs"><div><dt>Fabric</dt><dd>${p.fabric}</dd></div><div><dt>Colour</dt><dd>${p.color}</dd></div><div><dt>Technique</dt><dd>${p.embroidery}</dd></div><div><dt>Occasion</dt><dd>${p.occasion}</dd></div><div><dt>Fit &amp; drape</dt><dd>${p.silhouette}</dd></div><div><dt>Availability</dt><dd>${p.madeToOrder?"Made to order":"Available"}</dd></div></dl>
+ <p class="kicker" style="margin-top:26px">Select couture size</p><div class="sizes">${["XS","S","M","L","XL","MADE TO MEASURE"].map(x=>`<button class="${store.size===x?"on":""}" data-size="${x}">${x}</button>`).join("")}</div>
+ ${store.size==="MADE TO MEASURE"?`<div class="mtm">${["Blouse neckline","Sleeve style","Dupatta drape","Lehenga length","Waist","Monogram initials","Wedding date"].map((x,i)=>`<input id="mtm-${i}" placeholder="${x}" aria-label="${x}">`).join("")}</div>`:""}
+ <div class="buy"><button class="btn" data-add="${p.id}">ADD TO BAG</button><button class="btn ghost" data-wish="${p.id}" aria-label="Wishlist">${on?"SAVED ♥":"SAVE ♡"}</button></div>
+ <a class="btn ghost" href="#/consultation" style="width:100%;margin-top:10px">BOOK A PRIVATE CONSULTATION</a><p class="muted" style="font-size:13px;margin-top:16px">Questions? Call <a href="${telHref()}" style="text-decoration:underline">${esc(SHOP.phone)}</a> or <a href="${waHref("Hi, I have a question about "+p.name)}" target="_blank" rel="noopener" style="text-decoration:underline">WhatsApp us</a>.</p></aside></div><section style="padding-bottom:96px">${reviewsBlock(p.id,"Reviews of "+p.name)}${reviewForm(p.id)}</section></div>`},
+
+consultation:()=>`<div class="consult">${ph("cocoa-sequin-set","","Cocoa sequin set")}<div class="panel"><div style="width:100%"><p class="kicker">By private appointment</p><h1>Let us shape your bridal chapter.</h1><p class="muted" style="margin-top:18px;max-width:560px;line-height:1.8">Share the first details of your celebration. Your personal couture advisor will curate silhouettes, craftsmanship and a fitting journey around you.</p><div style="margin-top:36px" data-form>${consultForm()}</div></div></div></div>`,
+
+journal:()=>`<div class="wrap" style="max-width:1400px;padding-block:72px 112px"><p class="kicker">The Journal</p><h1 style="font-size:clamp(3.4rem,8vw,6rem);margin-top:12px">Stories from the atelier.</h1>
+ <div class="journal" style="margin-top:56px">${journalItems.map(([k,c,t])=>`<article>${ph(k,"","")}<p class="kicker muted" style="margin-top:20px">${c}</p><h3>${t}</h3><p class="muted" style="margin-top:10px;line-height:1.8">Inside the choices, hands and considered details that transform couture into a piece of personal history.</p></article>`).join("").replace(/aspect-ratio/g,"aspect-ratio")}</div></div>`,
+
+checkout:()=>{const items=store.bag.map(b=>({...products.find(p=>p.id===b.id),size:b.size}));
+ if(!items.length)return `<div class="page center"><p class="kicker">Place an order</p><h1>Your bag is empty.</h1><p class="lead" style="margin-inline:auto">Add an outfit from the collection, then come back here to place your order.</p><div class="btns" style="justify-content:center"><a class="btn" href="#/shop">BROWSE THE COLLECTION</a></div></div>`;
+ const total=items.reduce((a,p)=>a+p.price,0);
+ return `<div class="page"><p class="kicker">Place an order</p><h1>Checkout</h1><p class="lead">Fill in your details and we'll call you within one working day to confirm size, colour and payment. No payment is taken on this page.</p>
+ <div class="two"><form class="form box" id="oform">
+  <p class="legend">Your details</p>
+  <div class="field"><label for="o-name">Full name</label><input id="o-name" required minlength="2" autocomplete="name"></div>
+  <div class="field"><label for="o-phone">Phone / WhatsApp</label><input id="o-phone" required minlength="7" type="tel" autocomplete="tel" placeholder="+91"></div>
+  <div class="field full"><label for="o-email">Email (optional)</label><input id="o-email" type="email" autocomplete="email"></div>
+  <p class="legend">Delivery address</p>
+  <div class="field full"><label for="o-addr">House, street, area</label><input id="o-addr" required autocomplete="street-address"></div>
+  <div class="field"><label for="o-city">City</label><input id="o-city" required autocomplete="address-level2"></div>
+  <div class="field"><label for="o-state">State</label><input id="o-state" required autocomplete="address-level1"></div>
+  <div class="field"><label for="o-pin">PIN code</label><input id="o-pin" required pattern="[0-9]{6}" inputmode="numeric" title="6-digit PIN code"></div>
+  <div class="field"><label for="o-date">Wedding / event date</label><input id="o-date" type="date"></div>
+  <div class="field full"><label for="o-notes">Measurements or notes (optional)</label><textarea id="o-notes" placeholder="Bust, waist, hip, length, or anything we should know"></textarea></div>
+  <p class="legend">How you'd like to pay</p>
+  <div class="pay full">
+   <label><input type="radio" name="o-pay" value="UPI advance" checked><span>50% advance by UPI<small>We send a UPI request after confirming your order on call.</small></span></label>
+   <label><input type="radio" name="o-pay" value="Bank transfer"><span>Bank transfer<small>Account details are shared on confirmation.</small></span></label>
+   <label><input type="radio" name="o-pay" value="Pay at store"><span>Pay at the store<small>Pay during your fitting visit.</small></span></label>
+  </div>
+  <div class="full" style="margin-top:10px"><button class="btn" type="submit" style="width:100%">PLACE ORDER · ${fmt(total)}</button></div>
+ </form>
+ <aside class="box"><h2>Order summary</h2>${items.map(p=>`<div class="sumline">${ph(p.image)}<div><b>${p.name}</b><p class="muted" style="font-size:12px">Size ${p.size}</p></div><span>${fmt(p.price)}</span></div>`).join("")}
+  <div style="margin-top:12px"><div class="row"><span>Subtotal</span><span>${fmt(total)}</span></div><div class="row"><span>Shipping in India</span><span>Free</span></div><div class="row total"><span>Total</span><span>${fmt(total)}</span></div><div class="row muted" style="font-size:13px"><span>Advance due on confirmation (50%)</span><span>${fmt(Math.round(total/2))}</span></div></div>
+ </aside></div></div>`},
+
+order:(id)=>{const o=findOrder(id);if(!o)return pages.notfound();const total=o.items.reduce((a,i)=>a+i.price,0);
+ return `<div class="page"><p class="kicker">Order placed</p><h1>Thank you, ${esc(o.name.split(" ")[0])}.</h1><p class="lead">Your order number is below. Keep it to track your order. We'll call you on ${esc(o.phone)} within one working day to confirm.</p>
+ <div class="two"><div class="box"><p class="kicker muted">Order number</p><p class="oid">${o.id}</p><p class="muted" style="margin-top:6px">Placed ${dfmt(o.created)} · Total ${fmt(total)} · ${esc(o.pay)}</p>
+  <p style="margin-top:22px;line-height:1.8">To make sure we receive it, send your order to the store as well:</p>
+  <div class="btns"><a class="btn" href="${waHref(orderText(o))}" target="_blank" rel="noopener">SEND ON WHATSAPP</a><a class="btn ghost" href="${mailHref("New order "+o.id,orderText(o))}" target="_blank" rel="noopener">SEND BY EMAIL</a><a class="btn ghost" href="#/track?id=${o.id}">TRACK THIS ORDER</a></div></div>
+ <aside class="box"><h2>Items</h2>${o.items.map(i=>{const p=products.find(x=>x.id===i.id);return `<div class="sumline">${ph(p.image)}<div><b>${p.name}</b><p class="muted" style="font-size:12px">Size ${i.size}</p></div><span>${fmt(i.price)}</span></div>`}).join("")}<div class="row total"><span>Total</span><span>${fmt(total)}</span></div></aside></div></div>`},
+
+track:()=>{const q=new URLSearchParams((location.hash.split("?")[1])||"").get("id")||"";const o=q?findOrder(q):null;
+ let res="";
+ if(q&&!o)res=`<div class="box" style="margin-top:28px"><h2>We couldn't find ${esc(q)}.</h2><p class="muted">Check the order number on your confirmation (it starts with BA-). Orders placed on another phone or browser won't show here yet; call us on <a href="${telHref()}" style="text-decoration:underline">${esc(SHOP.phone)}</a> and we'll look it up.</p></div>`;
+ if(o){const st=stagesFor(o);const age=(Date.now()-o.created)/DAY;let cur=0;st.forEach((x,i)=>{if(age>=x[2])cur=i});
+  res=`<div class="two"><div class="box"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><p class="oid">${o.id}</p><span class="pill">${st[cur][0]}</span></div>
+  ${o.sample?'<p class="fillme">This is a sample order so you can see how tracking looks.</p>':""}
+  <ol class="timeline">${st.map((x,i)=>`<li class="${i<cur?"done":i===cur?"done now":""}"><span class="dot"></span><b>${x[0]}</b><span>${i<=cur?"":"Expected "}${dfmt(o.created+x[2]*DAY)} · ${x[1]}</span></li>`).join("")}</ol></div>
+  <aside class="box"><h2>Order details</h2><p class="muted" style="font-size:13px">Placed ${dfmt(o.created)} · ${esc(o.city||"")}</p>${o.items.map(i=>{const p=products.find(x=>x.id===i.id);return `<div class="sumline">${ph(p.image)}<div><b>${p.name}</b><p class="muted" style="font-size:12px">Size ${i.size}</p></div><span>${fmt(i.price)}</span></div>`}).join("")}
+  <div class="btns"><a class="btn ghost" href="${waHref("Hi, I'd like an update on order "+o.id)}" target="_blank" rel="noopener">ASK FOR AN UPDATE</a></div></aside></div>`}
+ return `<div class="page"><p class="kicker">Order tracking</p><h1>Track your order</h1><p class="lead">Enter the order number from your confirmation. Made-to-order outfits usually take 6 to 7 weeks from confirmation to delivery.</p>
+ <form class="box" id="tform" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:28px"><div class="field" style="flex:1;min-width:220px"><label for="t-id">Order number</label><input id="t-id" required placeholder="e.g. BA-260919-4821" value="${esc(q)}"></div><button class="btn" type="submit">TRACK</button></form>
+ ${q?"":'<p class="muted" style="margin-top:12px;font-size:13px">Want to see how it works? Try the sample order <a href="#/track?id=BA-SAMPLE" style="text-decoration:underline">BA-SAMPLE</a>.</p>'}
+ ${res}</div>`},
+
+reviews:()=>`<div class="page" style="max-width:1400px">${reviewsBlock("","What our brides say")}${reviewForm("")}</div>`,
+
+contact:()=>`<div class="page"><p class="kicker">Contact</p><h1>We'd love to hear from you.</h1><p class="lead">Call, message or visit the store. For fittings and bridal styling, book an appointment so a stylist is free for you.</p>
+ <div class="two"><div class="box">${contactList()}<div class="btns"><a class="btn" href="${waHref("Hi, I'd like to know more about your bridal collection.")}" target="_blank" rel="noopener">WHATSAPP US</a><a class="btn ghost" href="${telHref()}">CALL</a><a class="btn ghost" href="${mailHref("Enquiry")}" target="_blank" rel="noopener">EMAIL</a><a class="btn ghost" href="${mapHref()}" target="_blank" rel="noopener">GET DIRECTIONS</a></div></div>
+ <aside class="box"><h2>Quick help</h2><div class="contact-list"><div><p class="k">Your order</p><p><a href="#/track" style="text-decoration:underline">Track an order</a> with your order number.</p></div><div><p class="k">Fittings</p><p><a href="#/consultation" style="text-decoration:underline">Book a consultation</a> for measurements and try-ons.</p></div><div><p class="k">Reviews</p><p><a href="#/reviews" style="text-decoration:underline">Read or write a review</a>.</p></div></div></aside></div></div>`,
+
+notfound:()=>`<div class="wrap center" style="padding-block:140px"><h1 style="font-size:6rem">404</h1><p class="muted" style="margin-top:12px">This page doesn't exist or has moved.</p><a class="btn" style="margin-top:24px" href="#/">GO HOME</a></div>`
+};
+
+function contactList(){return `<div class="contact-list"><div><p class="k">Phone / WhatsApp</p><p class="v"><a href="${telHref()}">${esc(SHOP.phone)}</a></p></div><div><p class="k">Email</p><p class="v"><a href="${mailHref("Enquiry")}" target="_blank" rel="noopener">${esc(SHOP.email)}</a></p></div><div><p class="k">Store address</p><p class="v">${esc(SHOP.address)}</p></div><div><p class="k">Hours</p><p class="v" style="font-size:1.25rem">${esc(SHOP.hours)}</p></div></div>`}
+function footContact(){document.getElementById("footContact").innerHTML=`<p class="kicker">Contact</p><a href="${telHref()}">${esc(SHOP.phone)}</a><a href="${mailHref("Enquiry")}" target="_blank" rel="noopener">${esc(SHOP.email)}</a><p>${esc(SHOP.address)}</p><a href="#/contact">All contact details</a>`}
+footContact();
+let last="";
+function render(){
+ const h=location.hash.slice(1)||"/";const [path,qs]=h.split("?");const parts=path.split("/").filter(Boolean);const r=parts[0]||"home";
+ if(h!==last){ if(r==="shop"){store.sel={};if(qs){new URLSearchParams(qs).forEach((v,k)=>store.sel[k]=[v])}} if(r==="product")store.img=null; }
+ const changed=h!==last;last=h;
+ const app=document.getElementById("app");
+ app.innerHTML=(r==="product"?pages.product(parts[1]):r==="order"?pages.order(parts[1]):pages[r]?pages[r]():pages.notfound());
+ document.querySelectorAll(".links a").forEach(a=>a.classList.toggle("on",a.dataset.r===r));
+ document.title=({shop:"Bridal Collection",consultation:"Private Consultation",journal:"The Journal",checkout:"Checkout",order:"Order placed",track:"Track your order",reviews:"Customer reviews",contact:"Contact",product:(products.find(p=>p.id===parts[1])||{}).name}[r]||"Indian Bridal Couture")+" · The Bridal Atelier";
+ if(changed)window.scrollTo(0,0);
+ counts();
+}
+window.addEventListener("hashchange",()=>{document.getElementById("nav").classList.remove("open");render()});
+
+document.addEventListener("click",e=>{
+ const w=e.target.closest("[data-wish]");if(w){e.preventDefault();toggleWish(w.dataset.wish);return}
+ const a=e.target.closest("[data-add]");if(a){addBag(a.dataset.add);return}
+ const s=e.target.closest("[data-size]");if(s){store.size=s.dataset.size;render();return}
+ const i=e.target.closest("[data-img]");if(i){store.img=i.dataset.img;render();return}
+ const q=e.target.closest("[data-quiz]");if(q){const v=q.dataset.quiz;if(v==="reset")store.quiz={step:0,answers:[]};else{store.quiz.answers.push(+v);store.quiz.step++}document.getElementById("quiz").innerHTML=quiz();return}
+ if(e.target.id==="fbtn"){document.getElementById("filters").classList.toggle("open");return}
+ if(e.target.closest("#menuBtn")){const n=document.getElementById("nav");n.classList.toggle("open");e.target.closest("#menuBtn").setAttribute("aria-expanded",n.classList.contains("open"));return}
+ if(e.target.closest("#bagBtn"))return drawer("bag");
+ if(e.target.closest("#wlBtn")||e.target.id==="mWl"){e.preventDefault();return drawer("wish")}
+});
+document.addEventListener("change",e=>{const f=e.target.dataset.f;if(!f)return;const v=e.target.value;const cur=store.sel[f]||[];store.sel[f]=e.target.checked?[...cur,v]:cur.filter(x=>x!==v);const open=document.getElementById("filters").classList.contains("open");render();if(open)document.getElementById("filters").classList.add("open")});
+document.addEventListener("submit",e=>{e.preventDefault();
+ const v=id=>(document.getElementById(id)||{}).value?.trim()||"";
+ if(e.target.id==="oform"){const d=new Date();const id="BA-"+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"-"+Math.floor(1000+Math.random()*9000);
+  const o={id,created:Date.now(),name:v("o-name"),phone:v("o-phone"),email:v("o-email"),address:v("o-addr")+", "+v("o-state"),city:v("o-city"),pin:v("o-pin"),date:v("o-date"),notes:v("o-notes"),pay:(e.target.querySelector("[name=o-pay]:checked")||{}).value,items:store.bag.map(b=>({id:b.id,size:b.size,price:products.find(p=>p.id===b.id).price}))};
+  const all=orders();all[id]=o;put("atelier-orders",all);store.bag=[];save();counts();location.hash="#/order/"+id;return}
+ if(e.target.id==="tform"){location.hash="#/track?id="+encodeURIComponent(v("t-id").toUpperCase());return}
+ if(e.target.id==="rform"){const r={name:v("rv-name"),city:v("rv-city"),product:e.target.dataset.product||v("rv-product"),rating:+((e.target.querySelector("[name=rv-rating]:checked")||{}).value||5),text:v("rv-text"),date:Date.now()};
+  const list=load("atelier-reviews",[]);list.unshift(r);put("atelier-reviews",list);render();toast("Thank you. Your review is posted.");return}
+ if(e.target.id==="nl"){e.target.innerHTML='<p style="padding:12px 0;width:100%">Thank you. Your first letter arrives with the next private preview.</p>';return}
+ if(e.target.id==="cform"){const n=document.getElementById("cf-name").value.split(" ")[0];const city=document.getElementById("cf-city").value;e.target.closest("[data-form]").innerHTML=`<div class="ok"><p class="kicker muted">Request received</p><h3 style="margin-top:8px">Thank you, ${n}.</h3><p class="muted" style="margin-top:10px;line-height:1.8">A couture advisor will contact you within two working days to arrange your appointment for ${city}. (In this preview, nothing was sent. The live site saves requests to the bridal_consultations table.)</p></div>`}
+});
+
+function drawer(kind){
+ const items=kind==="bag"?store.bag.map((b,i)=>({...products.find(p=>p.id===b.id),size:b.size,i})):[...store.wish].map(id=>products.find(p=>p.id===id));
+ const total=kind==="bag"?items.reduce((s,p)=>s+p.price,0):0;
+ const d=document.createElement("div");d.className="drawer";d.innerHTML=`<div class="sheet" role="dialog" aria-label="${kind==="bag"?"Your bag":"Wishlist"}">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2>${kind==="bag"?"Your bag":"Wishlist"}</h2><button class="x" data-close>Close</button></div>
+  ${items.length?items.map(p=>`<div class="line">${ph(p.image)}<div><b>${p.name}</b><p class="muted" style="font-size:12px">${kind==="bag"?"Size "+p.size:p.collection}</p></div><div style="text-align:right"><p style="font-size:13px">${fmt(p.price)}</p><button class="x" data-rm="${kind==="bag"?p.i:p.id}">Remove</button></div></div>`).join(""):`<p class="muted">${kind==="bag"?"Your bag is empty. Add a piece from the collection to see it here.":"Nothing saved yet. Tap the heart on any piece to keep it here."}</p>`}
+  ${kind==="bag"&&items.length?`<div style="margin-top:auto;display:flex;justify-content:space-between;font-size:15px"><span>Subtotal</span><span>${fmt(total)}</span></div><a class="btn" href="#/checkout" data-close>PLACE ORDER</a><a class="btn ghost" href="#/consultation" data-close>TALK TO A STYLIST FIRST</a>`:""}
+ </div>`;
+ d.addEventListener("click",e=>{if(e.target===d||e.target.closest("[data-close]")){d.remove();return}
+  const rm=e.target.closest("[data-rm]");if(rm){if(kind==="bag")store.bag.splice(+rm.dataset.rm,1);else store.wish.delete(rm.dataset.rm);save();counts();d.remove();render();drawer(kind)}});
+ document.body.appendChild(d);
+}
+render();
+</script>
+
+</html>
