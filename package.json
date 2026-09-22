@@ -1,0 +1,13 @@
+{
+  "name": "bridal-collection-trend",
+  "version": "1.0.0",
+  "description": "Bridal Collection Trend Website",
+  "type": "module",
+  "scripts": {
+    "start": "node preview/serve.mjs",
+    "dev": "node preview/serve.mjs"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
